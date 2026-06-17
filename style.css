@@ -306,10 +306,16 @@ section > div {
 }
 
 .slider-section .h4 {
-  color: #005fa3;
-  font-size: 1.6rem;
-  font-weight: 900;
+  color: #0071C5;
+  font-size: 2rem;
   margin-bottom: 0.65rem;
+  font-weight: 900;
+  transition: all 0.3s ease;
+}
+
+.slider-section .h4:hover,
+.slider-section .h4:focus-visible {
+  color: #00b4d8;
 }
 
 .slider-section .text-muted {
