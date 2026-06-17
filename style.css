@@ -267,7 +267,7 @@ section > div {
   border-left: 5px solid #00b4d8;
 }
 
-..slider-section > article.slider-slide > .card-body {
+.slider-section > article.slider-slide > .card-body {
   padding: 0;
 }
 
