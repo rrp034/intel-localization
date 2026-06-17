@@ -267,8 +267,78 @@ section > div {
   border-left: 5px solid #00b4d8;
 }
 
-.slider-section > article.slider-slide > .card-body {
+..slider-section > article.slider-slide > .card-body {
   padding: 0;
+}
+
+.slider-section .card-title {
+  color: #005fa3;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 1rem;
+}
+
+.slider-section .text-muted,
+.slider-section .form-text {
+  color: #445d77;
+  opacity: 1;
+}
+
+.slider-section .input-group-text {
+  background: #f4f9ff;
+  border: 1px solid rgba(0, 113, 197, 0.22);
+  border-right: 0;
+  color: #00315a;
+  font-weight: 700;
+  border-radius: 0.9rem 0 0 0.9rem;
+}
+
+.slider-section .form-control {
+  border-radius: 0 0.9rem 0.9rem 0;
+}
+
+.slider-section .btn-primary {
+  min-width: 150px;
+  border-radius: 0 0.9rem 0.9rem 0;
+  font-weight: 700;
+  padding: 0.8rem 1.2rem;
+}
+
+.slider-section .h4 {
+  color: #005fa3;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 0.65rem;
+}
+
+.slider-section .text-muted {
+  color: #445d77;
+  opacity: 1;
+}
+
+.slider-section .btn-outline-primary {
+  color: #0071C5;
+  border-color: rgba(0, 113, 197, 0.6);
+  border-radius: 0.9rem;
+  padding: 0.9rem 1.3rem;
+  font-weight: 700;
+  background: transparent;
+}
+
+.slider-section .btn-outline-primary:hover,
+.slider-section .btn-outline-primary:focus {
+  background: rgba(0, 113, 197, 0.08);
+}
+
+.slider-section .accordion-item {
+  border: 1px solid rgba(0, 113, 197, 0.16);
+}
+
+.slider-section .accordion-button {
+  background: #f4f9ff;
+  color: #004677;
+  font-weight: 700;
 }
 
 /* Timeline dots (visible on hover) */
