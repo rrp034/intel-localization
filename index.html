@@ -58,7 +58,7 @@
     <div id="card-1971">
       <h2>1971</h2>
       <h3>First Microprocessor</h3>
-      <img src="img/bill-fairs--QALfjTlhTE-unsplash.jpg" alt="Intel microprocessor illustration" />
+      <img src="img/bill-fairs--QALfjTlhTE-unsplash.jpg" alt="Intel early microprocessor illustration showing chip and circuitry" />
       <p>
         Intel debuts the 4004, the world's first commercial microprocessor, 
         igniting the microprocessor revolution and propelling the future 
@@ -70,7 +70,7 @@
     <div id="card-1978">
       <h2>1978</h2>
       <h3>8086 Processor</h3>
-      <img src="img/3.png" alt="8086 Processor 1978" />
+      <img src="img/3.png" alt="8086 Processor die and packaging from 1978" />
       <p>
         Launch of the 8086 processor, establishing the x86 architecture 
         that drives countless PCs and servers in the modern era.
@@ -159,14 +159,15 @@
         <p class="text-center text-muted mb-4">
           Get the latest updates on Intel’s sustainability progress, goals, and innovation directly in your inbox.
         </p>
-        <form class="row g-3" aria-label="Sustainability newsletter subscription form">
+        <form class="row g-3" aria-label="Sustainability newsletter subscription form" role="form">
           <div class="col-12">
-            <div class="input-group input-group-lg">
+            <label for="newsletterEmail" class="visually-hidden">Email address</label>
+            <div class="input-group input-group-lg" role="group" aria-labelledby="newsletterEmailLabel">
               <span class="input-group-text" id="newsletterEmailLabel">Email address</span>
-              <input type="email" class="form-control" id="newsletterEmail" placeholder="you@example.com" aria-describedby="newsletterEmailLabel newsletterHelp" required>
-              <button type="submit" class="btn btn-primary">Subscribe</button>
+              <input type="email" class="form-control" id="newsletterEmail" name="email" placeholder="you@example.com" aria-describedby="newsletterEmailLabel newsletterHelp" required>
+              <button type="submit" class="btn btn-primary" aria-label="Subscribe to sustainability newsletter">Subscribe</button>
             </div>
-            <div id="newsletterHelp" class="form-text mt-2">
+            <div id="newsletterHelp" class="form-text mt-2" aria-live="polite">
               We respect your privacy and will only send relevant updates.
             </div>
           </div>
@@ -181,7 +182,7 @@
             <h2 class="h4">Interactive Sustainability Highlights</h2>
             <p class="text-muted mb-0">Browse key Intel sustainability topics with a responsive accordion and learn more in the modal.</p>
           </div>
-          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detailsModal">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal">
             Open Details
           </button>
         </div>
@@ -301,20 +302,51 @@
       document.body.classList.toggle('rtl-active', isRtl);
     }
 
+    // detect RTL by scanning visible text when lang attribute isn't updated
+    function containsRtlChars(text) {
+      if (!text) return false;
+      const rtlRegex = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/;
+      return rtlRegex.test(text);
+    }
+
+    function detectTextDirectionFromContent() {
+      // sample headings and paragraphs for detection
+      const selectors = ['h1', 'h2', 'h3', 'p', 'button', 'label'];
+      for (const sel of selectors) {
+        const el = document.querySelector(sel);
+        if (el && containsRtlChars(el.textContent)) return 'rtl';
+      }
+      return null;
+    }
+
     function watchLanguageChange() {
-      const observer = new MutationObserver(() => {
+      // observe lang/dir attribute changes on <html>
+      const htmlObserver = new MutationObserver(() => {
         const lang = detectPageLanguage();
         updateLayoutDirection(lang);
       });
-
-      observer.observe(document.documentElement, {
+      htmlObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['lang', 'dir'],
       });
+
+      // observe body subtree for text changes (e.g., Google Translate)
+      const bodyObserver = new MutationObserver(() => {
+        const detected = detectTextDirectionFromContent();
+        if (detected) updateLayoutDirection(detected);
+      });
+      bodyObserver.observe(document.body, { subtree: true, characterData: true, childList: true });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateLayoutDirection(detectPageLanguage());
+      // priority: explicit lang attr, then content-based detection
+      const lang = detectPageLanguage();
+      if (lang) {
+        updateLayoutDirection(lang);
+      } else {
+        const contentDir = detectTextDirectionFromContent();
+        if (contentDir) updateLayoutDirection(contentDir);
+      }
       watchLanguageChange();
     });
   </script>
