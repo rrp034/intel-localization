@@ -35,7 +35,10 @@ jobs:
           npx lighthouse http://127.0.0.1:8080/index.html \
             --only-categories=accessibility \
             --chrome-flags="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage" \
-            --output=json --output-path=./lighthouse-accessibility.json \
+            --output=json --output-path=./lighthouse-accessibility.json || true
+          npx lighthouse http://127.0.0.1:8080/index.html \
+            --only-categories=accessibility \
+            --chrome-flags="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage" \
             --output=html --output-path=./lighthouse-accessibility.html || true
 
       - name: Upload Lighthouse reports
