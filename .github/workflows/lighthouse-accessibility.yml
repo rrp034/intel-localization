@@ -1,0 +1,52 @@
+name: Lighthouse Accessibility
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  lighthouse:
+    name: Run Lighthouse Accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Lighthouse and http-server
+        run: npm install -g lighthouse http-server
+
+      - name: Start static server
+        run: |
+          http-server . -p 8080 -c-1 &
+          echo "server_pid=$!" > server.pid
+          sleep 2
+
+      - name: Run Lighthouse (accessibility)
+        env:
+          CHROME_PATH: /usr/bin/google-chrome-stable
+        run: |
+          # Ensure Lighthouse doesn't fail the job; capture output files
+          npx lighthouse http://127.0.0.1:8080/index.html \
+            --only-categories=accessibility \
+            --chrome-flags="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage" \
+            --output=json --output-path=./lighthouse-accessibility.json \
+            --output=html --output-path=./lighthouse-accessibility.html || true
+
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-accessibility-report
+          path: |
+            lighthouse-accessibility.json
+            lighthouse-accessibility.html
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then kill $(cat server.pid) || true; fi
